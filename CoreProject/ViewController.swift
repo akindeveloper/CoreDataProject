@@ -69,6 +69,29 @@ class ViewController: UIViewController {
     }
 
     override func viewDidLoad() {
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appdelegate.persistentContainer.viewContext
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Data")
+        
+        do{
+            
+            let results = try context.fetch(request)
+            for result in results as! [NSManagedObject]{
+                if let username = result.value(forKey: "name") as? String{
+                    label2.alpha = 1
+                    label2.text = "My name is " + username + "!"
+                    txt.alpha = 0
+                    login.alpha = 0
+                    logout.alpha = 1
+                    
+                }
+                
+            }
+        }catch{
+            
+            print("error in viewdidload method")
+        }
+        
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     }
