@@ -35,6 +35,37 @@ class ViewController: UIViewController {
     @IBOutlet var label2: UILabel!
     @IBOutlet var logout: UIButton!
     @IBAction func logout2(_ sender: Any) {
+        let appdelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appdelegate.persistentContainer.viewContext
+
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Data")
+        
+        do{
+            
+          let results =  try context.fetch(request)
+            for result in results as! [NSManagedObject]{
+                
+                context.delete(result)
+                do{
+                    
+                    try context.save()
+                    
+                }catch{
+                    
+                    print("each delete failed")
+                }
+            }
+            label2.alpha = 0
+            txt.alpha = 1
+            login.alpha = 1
+            logout.alpha = 0
+            
+        }catch{
+            
+            print("delete failed")
+        }
+        
+
     }
 
     override func viewDidLoad() {
